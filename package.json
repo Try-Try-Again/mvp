@@ -1,0 +1,39 @@
+{
+  "name": "hrr43-mvp",
+  "version": "1.0.0",
+  "description": "typing coach",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --watch --mode development",
+    "build:prod": "webpack -mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Try-Try-Again/hrr43-mvp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Try-Try-Again/hrr43-mvp/issues"
+  },
+  "homepage": "https://github.com/Try-Try-Again/hrr43-mvp#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.6",
+    "@babel/preset-env": "^7.8.6",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-template": "^6.2.0",
+    "object-assign": "^4.1.1",
+    "postcss-import": "^8.0.2",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0"
+  }
+}
