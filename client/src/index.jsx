@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Display from './components/display.jsx';
 
-//test
+// test
 ReactDOM.render(
-  <h1>Hello, world!</h1>,
-  document.getElementById('root')
+  <div>
+    <Display />
+  </div>,
+  document.getElementById('root'),
 );

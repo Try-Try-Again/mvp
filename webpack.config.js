@@ -1,10 +1,11 @@
 const path = require('path');
 
 module.exports = {
+  resolve: { extensions: ['.js', '.jsx'] },
   entry: './client/src/index.jsx',
   output: {
     path: path.resolve(__dirname, 'client/dist/'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     rules: [
@@ -12,9 +13,9 @@ module.exports = {
         test: /\.jsx$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader"
-        }
-      }
-    ]
-  }
+          loader: 'babel-loader',
+        },
+      },
+    ],
+  },
 };
