@@ -21,9 +21,12 @@ module.exports = {
   },
   plugins: [
     'react',
+    //"react-hooks",
   ],
   rules: {
     "react/jsx-filename-extension": [0],
     "import/extensions": "off",
+    // "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    // "react-hooks/exhaustive-deps": "warn",// Checks effect dependencies
   },
 };
