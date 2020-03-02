@@ -2,18 +2,17 @@ import React from 'react';
 
 const allKeys = [
   'g', 'h', 'b', 'n', 't', 'y', '5', '6', 'f', 'j', 'v',
-  // 'm', 'r', 'u', '4', '7', 'd', 'k', 'c', ',', 'e', 'i',
-  // '3', '8', 's', 'l', 'x', '.', 'w', 'o', '2', '9', 'a',
-  // ';', 'z', '/', 'q', 'p', '1', '0', '`', "'", '[', '-',
-  // ']', '=', '\\', 'G', 'H', 'B', 'N', 'T', 'Y', '%', '^',
-  // 'F', 'J', 'V', 'M', 'R', 'U', '$', '&', 'D', 'K', 'C',
-  // '<', 'E', 'I', '#', '*', 'S', 'L', 'X', '>', 'W', 'O',
-  // '@', '(', 'A', ':', 'Z', '?', 'Q', 'P', '!', ')', '~',
-  // '"', '{', '_', '}', '+', '|',
+  'm', 'r', 'u', '4', '7', 'd', 'k', 'c', ',', 'e', 'i',
+  '3', '8', 's', 'l', 'x', '.', 'w', 'o', '2', '9', 'a',
+  ';', 'z', '/', 'q', 'p', '1', '0', '`', "'", '[', '-',
+  ']', '=', '\\', 'G', 'H', 'B', 'N', 'T', 'Y', '%', '^',
+  'F', 'J', 'V', 'M', 'R', 'U', '$', '&', 'D', 'K', 'C',
+  '<', 'E', 'I', '#', '*', 'S', 'L', 'X', '>', 'W', 'O',
+  '@', '(', 'A', ':', 'Z', '?', 'Q', 'P', '!', ')', '~',
+  '"', '{', '_', '}', '+', '|',
 ];
 
 const startDate = new Date();
-
 const userData = allKeys.map((key, index) => (
   {
     key,
@@ -22,7 +21,6 @@ const userData = allKeys.map((key, index) => (
     history: [1],
   }
 ));
-
 
 class Display extends React.Component {
   constructor(props) {
@@ -33,7 +31,10 @@ class Display extends React.Component {
       // pressedKey: '',
     };
 
+    this.userData = userData.slice(); // change to query later
     this.currentList = [];
+    this.startTime = 0;
+    this.firstTry = true;
 
     this.testKeypress = this.testKeypress.bind(this);
     this.nextKey = this.nextKey.bind(this);
@@ -49,9 +50,7 @@ class Display extends React.Component {
   }
 
   shuffleKeys() {
-    const { currentKey } = this.state;
     const getAverage = (array) => array.reduce((a, b) => a + b, 0) / array.length;
-
     const duplicate = (array, count) => {
       let result = [];
       for (let i = 0; i < count; i += 1) {
@@ -59,64 +58,46 @@ class Display extends React.Component {
       }
       return result;
     };
-
-    duplicate( // get 10 of the wrong cards and duplicate them each 10 times
-      userData
+    this.currentList = duplicate(
+      this.userData
         .filter((key) => getAverage(key.history) < 1)
         .sort((a, b) => getAverage(a.history) - getAverage(b.history))
         .slice(0, 10),
       10,
     )
-      .concat( // get the five oldest cards
-        userData.sort((a, b) => a.lastAttempt - b.lastAttempt).slice(0, 5),
-      );
-
-    // get slow cards
-    // self.to_test = self.c.fetchall()[:5]
-    // self.to_test += self.to_test[:1] * 9
-    // self.to_test += self.to_test[1:3] * 4
-    // self.to_test += self.to_test[3:5] * 3
+      .concat(this.userData.sort((a, b) => a.lastAttempt - b.lastAttempt).slice(0, 5))
+      .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(0, 1), 9))
+      .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(1, 3), 4))
+      .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(3, 5), 3))
+      .map((key) => key.key);
   }
 
   nextKey() {
     if (this.currentList.length === 0) {
       this.shuffleKeys();
-      // this.currentList = allKeys.slice();
     }
-    //  setCurrentList(currentList.slice(1));
-    //  setCurrentKey(currentList[0]);
     this.setState({ currentKey: this.currentList.shift() });
-    // if there's another card,
-    //   reassign currnent card to next card in the deck
-    //   set startTime to current time
-    // else:
-    //   gatherKeys
+    this.startTime = performance.now();
+    this.firstTry = true;
   }
 
   testKeypress(keypress) {
     const { currentKey } = this.state;
-    // if keypress matches current key, set response time to current time - this.state.startTime
+    const keyIndex = this.userData.findIndex((element) => element.key === currentKey);
     if (keypress === currentKey) {
-      console.log('CORRECT!');
-      // setCurrentKey(allKeys.shift());
+      this.userData[keyIndex].time = performance.now() - this.startTime;
+      this.userData[keyIndex].lastAttempt = new Date();
+      this.userData[keyIndex].history = [
+        this.firstTry ? 1 : 0,
+        ...this.userData[keyIndex].history.slice(0, 7),
+      ];
       this.nextKey();
     } else {
-      // else show red for a bit
+      this.firstTry = false;
       this.setState({ textColor: 'red' });
       setTimeout(() => { this.setState({ textColor: 'black' }); }, 300);
     }
   }
-  // const [pressedKey, setPressedKey] = useState();
-  // const [currentKey, setCurrentKey] = useState();
-  // const [textColor, setTextColor] = useState('black');
-  // const [currentList, setCurrentList] = useState(allKeys.slice());
-
-  // const nextChar = () => {
-  // };
-
-  // useEffect(() => { // merge this back into the on keypress thingy
-  // }, [pressedKey]);
-
 
   render() {
     const { textColor, currentKey } = this.state;
