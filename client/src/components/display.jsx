@@ -16,7 +16,7 @@ const startDate = new Date();
 const userData = allKeys.map((key, index) => (
   {
     key,
-    time: index, // change to zero later
+    time: 0,
     lastAttempt: new Date(startDate.getDate() + index * 1000),
     history: [1],
   }
@@ -28,7 +28,6 @@ class Display extends React.Component {
     this.state = {
       currentKey: '',
       textColor: 'black',
-      // pressedKey: '',
     };
 
     this.userData = userData.slice(); // change to query later
@@ -69,7 +68,8 @@ class Display extends React.Component {
       .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(0, 1), 9))
       .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(1, 3), 4))
       .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(3, 5), 3))
-      .map((key) => key.key);
+      .map((key) => key.key)
+      .sort(() => 0.5 - Math.random());
   }
 
   nextKey() {
@@ -79,6 +79,10 @@ class Display extends React.Component {
     this.setState({ currentKey: this.currentList.shift() });
     this.startTime = performance.now();
     this.firstTry = true;
+    console.clear();
+    for (let i = 0; i < this.currentList.length; i += 1) {
+      console.log(this.currentList[i]);
+    }
   }
 
   testKeypress(keypress) {
