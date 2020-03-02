@@ -79,10 +79,6 @@ class Display extends React.Component {
     this.setState({ currentKey: this.currentList.shift() });
     this.startTime = performance.now();
     this.firstTry = true;
-    console.clear();
-    for (let i = 0; i < this.currentList.length; i += 1) {
-      console.log(this.currentList[i]);
-    }
   }
 
   testKeypress(keypress) {
