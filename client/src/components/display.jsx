@@ -17,7 +17,7 @@ const startDate = new Date();
 const userData = allKeys.map((key, index) => (
   {
     key,
-    time: 0,
+    time: index, // change to zero later
     lastAttempt: new Date(startDate.getDate() + index * 1000),
     history: [1],
   }
@@ -49,17 +49,27 @@ class Display extends React.Component {
   }
 
   shuffleKeys() {
+    const { currentKey } = this.state;
     const getAverage = (array) => array.reduce((a, b) => a + b, 0) / array.length;
 
-    // get the five oldest cards
-    const oldestKeys = userData.sort((a, b) => a.lastAttempt - b.lastAttempt).slice(0, 5);
+    const duplicate = (array, count) => {
+      let result = [];
+      for (let i = 0; i < count; i += 1) {
+        result = result.concat(array);
+      }
+      return result;
+    };
 
-    // get 10 of the wrong cards and duplicate by 10
-    const incorrectKeys = userData
-      .filter((key) => getAverage(key.history) < 1)
-      .sort((a, b) => getAverage(a.history) - getAverage(b.history))
-      .slice(0, 10)
-      .map((currentValue, index, array) => array);
+    duplicate( // get 10 of the wrong cards and duplicate them each 10 times
+      userData
+        .filter((key) => getAverage(key.history) < 1)
+        .sort((a, b) => getAverage(a.history) - getAverage(b.history))
+        .slice(0, 10),
+      10,
+    )
+      .concat( // get the five oldest cards
+        userData.sort((a, b) => a.lastAttempt - b.lastAttempt).slice(0, 5),
+      );
 
     // get slow cards
     // self.to_test = self.c.fetchall()[:5]
