@@ -26,11 +26,16 @@ class Display extends React.Component {
     fetch('http://localhost:3000/profiles')
       .then((response) => response.json())
       .then((data) => {
-        this.userData = data.keys;
+        this.userData = data.keys
+        // this.userData
+          .map((keyPress) => ({
+            key: keyPress.key,
+            time: keyPress.time,
+            lastAttempt: new Date(keyPress.lastAttempt),
+            history: keyPress.history,
+          }));
       })
-      .then(() => {
-        this.nextKey();
-      });
+      .then(() => this.nextKey());
   }
 
   shuffleKeys() {
@@ -42,13 +47,14 @@ class Display extends React.Component {
       }
       return result;
     };
-    this.currentList = duplicate(
-      this.userData
-        .filter((key) => getAverage(key.history) < 1)
-        .sort((a, b) => getAverage(a.history) - getAverage(b.history))
-        .slice(0, 10),
-      10,
-    )
+    this.currentList = []
+      .concat(duplicate(
+        this.userData
+          .filter((key) => getAverage(key.history) < 1)
+          .sort((a, b) => getAverage(a.history) - getAverage(b.history))
+          .slice(0, 10),
+        10,
+      ))
       .concat(this.userData.sort((a, b) => a.lastAttempt - b.lastAttempt).slice(0, 5))
       .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(0, 1), 9))
       .concat(duplicate(this.userData.sort((a, b) => b.time - a.time).slice(1, 3), 4))
@@ -59,7 +65,13 @@ class Display extends React.Component {
 
   nextKey() {
     if (this.currentList.length === 0) {
-      // post data, and continue
+      fetch('http://localhost:3000/profiles', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.userData),
+      });
       this.shuffleKeys();
     }
     this.setState({ currentKey: this.currentList.shift() });
