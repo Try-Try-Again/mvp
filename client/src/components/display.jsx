@@ -1,27 +1,5 @@
 import React from 'react';
 
-const allKeys = [
-  'g', 'h', 'b', 'n', 't', 'y', '5', '6', 'f', 'j', 'v',
-  'm', 'r', 'u', '4', '7', 'd', 'k', 'c', ',', 'e', 'i',
-  '3', '8', 's', 'l', 'x', '.', 'w', 'o', '2', '9', 'a',
-  ';', 'z', '/', 'q', 'p', '1', '0', '`', "'", '[', '-',
-  ']', '=', '\\', 'G', 'H', 'B', 'N', 'T', 'Y', '%', '^',
-  'F', 'J', 'V', 'M', 'R', 'U', '$', '&', 'D', 'K', 'C',
-  '<', 'E', 'I', '#', '*', 'S', 'L', 'X', '>', 'W', 'O',
-  '@', '(', 'A', ':', 'Z', '?', 'Q', 'P', '!', ')', '~',
-  '"', '{', '_', '}', '+', '|',
-];
-
-const startDate = new Date();
-const userData = allKeys.map((key, index) => (
-  {
-    key,
-    time: 0,
-    lastAttempt: new Date(startDate.getDate() + index * 1000),
-    history: [1],
-  }
-));
-
 class Display extends React.Component {
   constructor(props) {
     super(props);
