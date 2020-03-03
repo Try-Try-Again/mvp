@@ -1,5 +1,3 @@
-const path = require('path');
-
 const UserProfile = require('../../database/models/userProfile.js');
 
 const allKeys = [
@@ -52,6 +50,15 @@ exports.find = (userIp, callback) => {
 };
 
 // update
+exports.update = (userIp, values, callback) => {
+  UserProfile.updateOne({ id: userIp }, { keys: values }, (err, result) => {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, result);
+    }
+  });
+};
 
 // delete
 // exports.remove = (userIp) => {
