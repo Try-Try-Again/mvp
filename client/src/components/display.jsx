@@ -8,7 +8,7 @@ class Display extends React.Component {
       textColor: 'black',
     };
 
-    this.userData = userData.slice(); // change to query later
+    // this.userData = userData.slice(); // change to query later
     this.currentList = [];
     this.startTime = 0;
     this.firstTry = true;
@@ -23,7 +23,14 @@ class Display extends React.Component {
   }
 
   componentDidMount() {
-    this.nextKey();
+    fetch('http://localhost:3000/profiles')
+      .then((response) => response.json())
+      .then((data) => {
+        this.userData = data.keys;
+      })
+      .then(() => {
+        this.nextKey();
+      });
   }
 
   shuffleKeys() {
@@ -52,6 +59,7 @@ class Display extends React.Component {
 
   nextKey() {
     if (this.currentList.length === 0) {
+      // post data, and continue
       this.shuffleKeys();
     }
     this.setState({ currentKey: this.currentList.shift() });
