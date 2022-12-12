@@ -42,7 +42,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.8.3",
     "eslinter": "^3.2.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "mongoose": "^5.9.2",
     "nodemon": "^2.0.2",
     "react": "^16.13.0",
